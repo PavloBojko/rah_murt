@@ -1,5 +1,10 @@
+<?php
+session_start();
+require 'functions.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>
@@ -23,6 +28,7 @@
     <link rel="mask-icon" href="img/favicon/safari-pinned-tab.svg" color="#5bbad5">
     <link rel="stylesheet" media="screen, print" href="css/page-login-alt.css">
 </head>
+
 <body>
     <div class="blankpage-form-field">
         <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 border-bottom-right-radius-0 px-4">
@@ -33,9 +39,10 @@
             </a>
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
-            <div class="alert alert-success">
-                Регистрация успешна
-            </div>
+            <?php
+            display_get_messege('success');
+            ?>
+
             <form action="">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>
@@ -43,7 +50,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
-                    <input type="password" id="password" class="form-control" placeholder="" >
+                    <input type="password" id="password" class="form-control" placeholder="">
                 </div>
                 <div class="form-group text-left">
                     <div class="custom-control custom-checkbox">
@@ -64,4 +71,5 @@
     </video>
     <script src="js/vendors.bundle.js"></script>
 </body>
+
 </html>
