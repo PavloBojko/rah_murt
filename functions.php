@@ -44,23 +44,17 @@ function auth(string $email, string $password)
     $result = get_user_on_email($email);
     if (empty($result)) {
         set_type_messege('danger', 'Пользователь не найден');
-
-        // go_to_page('page_login.php');
         return false;
     }
-    var_dump($result);
+
     $hash = $result["password"];
-    echo $hash;
     
     if (!password_verify($password, $hash)) {
         set_type_messege('danger', 'Неверный пароль');
-        // go_to_page('page_login.php');
         return false;
     }else {
-        $_SESSION['user']=$result[0]["email"];
+        $_SESSION['user']=$result["email"];
         set_type_messege('success', " Профиль <b>{$result['email']}</b> успешно обновлен");
         return true;
     }
-
-    // var_dump($result);
 }
