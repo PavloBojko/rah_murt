@@ -41,24 +41,25 @@ require 'functions.php';
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
             <?php
             display_get_messege('success');
+            display_get_messege('danger');
             ?>
 
-            <form action="">
+            <form action="login.php" method="POST">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>
-                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="">
+                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="" name="email">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
-                    <input type="password" id="password" class="form-control" placeholder="">
+                    <input type="password" id="password" class="form-control" placeholder="" name="password">
                 </div>
                 <div class="form-group text-left">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="rememberme">
+                        <input type="checkbox" class="custom-control-input" id="rememberme" name="check">
                         <label class="custom-control-label" for="rememberme">Запомнить меня</label>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-default float-right">Войти</button>
+                <button type="submit" class="btn btn-default float-right" name="auth">Войти</button>
             </form>
         </div>
         <div class="blankpage-footer text-center">

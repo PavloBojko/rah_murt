@@ -1,5 +1,5 @@
 <?php
-
+//получаем пользователя по email
 function get_user_on_email(string $email = null)
 {
     $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
@@ -9,7 +9,7 @@ function get_user_on_email(string $email = null)
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result;
 }
-
+// регестрируем пользователя
 function add_user(string $email, string $password)
 {
     $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
@@ -17,16 +17,17 @@ function add_user(string $email, string $password)
     $statement = $pdo->prepare($sql);
     $statement->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
 }
-
+//формируем сообщение
 function set_type_messege(string $type = null, string $messege = null)
 {
     $_SESSION[$type] = $messege;
 }
-
+//переход на страницу
 function go_to_page(string $page = null)
 {
     header("location: /{$page}");
 }
+//вывод сообщения уже на страницу
 function display_get_messege(string $name = null)
 {
     if (isset($_SESSION[$name])) {
@@ -35,4 +36,31 @@ function display_get_messege(string $name = null)
         <strong>Уведомление!</strong> $_SESSION[$name]</div>";
         unset($_SESSION[$name]);
     }
+}
+//авторизация
+function auth(string $email, string $password)
+{
+
+    $result = get_user_on_email($email);
+    if (empty($result)) {
+        set_type_messege('danger', 'Пользователь не найден');
+
+        // go_to_page('page_login.php');
+        return false;
+    }
+    var_dump($result);
+    $hash = $result["password"];
+    echo $hash;
+    
+    if (!password_verify($password, $hash)) {
+        set_type_messege('danger', 'Неверный пароль');
+        // go_to_page('page_login.php');
+        return false;
+    }else {
+        $_SESSION['user']=$result[0]["email"];
+        set_type_messege('success', " Профиль <b>{$result['email']}</b> успешно обновлен");
+        return true;
+    }
+
+    // var_dump($result);
 }

@@ -1,3 +1,7 @@
+<?php
+session_start();
+require 'functions.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,9 +38,12 @@
         </nav>
 
         <main id="js-page-content" role="main" class="page-content mt-3">
-            <div class="alert alert-success">
+            <?php
+                display_get_messege('success');
+            ?>
+            <!-- <div class="alert alert-success">
                 Профиль успешно обновлен.
-            </div>
+            </div> -->
             <div class="subheader">
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> Список пользователей
