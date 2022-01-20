@@ -54,7 +54,36 @@ function auth(string $email, string $password)
         return false;
     }else {
         $_SESSION['user']=$result["email"];
-        set_type_messege('success', " Профиль <b>{$result['email']}</b> успешно обновлен");
+        set_type_messege('success', " Ппользователь <b>{$result['email']}</b> успешно авторизирован");
         return true;
     }
+}
+//аторизирован ли пользователь
+function or_an_auth_user()
+{
+    if (isset($_SESSION['user']) && !empty($_SESSION['user'])) {
+        return true;
+    }
+    return false;
+}
+//админ ли пользователь
+function user_is_admin(string $email)
+{
+   $result = get_user_on_email($email);
+//    var_dump($result);
+   if ($result['role']==='admin') {
+       return true;
+   }
+   return false;
+}
+//получить всех пользователей
+function get_all_users()
+{
+    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
+    $sql = "SELECT * FROM `users`";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+
 }
