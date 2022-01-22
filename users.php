@@ -60,9 +60,8 @@ if (!or_an_auth_user()) {
             <div class="col-xl-12">
                 <?php
                 if (user_is_admin($_SESSION['user'])) {
-                    $_SESSION['admin'] = true;
                 ?>
-                    <a class="btn btn-success" href="create_user.html">Добавить</a>
+                    <a class="btn btn-success" href="create_user.php">Добавить</a>
                 <?php
                 }
                 ?>

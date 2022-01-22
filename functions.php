@@ -48,12 +48,12 @@ function auth(string $email, string $password)
     }
 
     $hash = $result["password"];
-    
+
     if (!password_verify($password, $hash)) {
         set_type_messege('danger', 'Неверный пароль');
         return false;
-    }else {
-        $_SESSION['user']=$result["email"];
+    } else {
+        $_SESSION['user'] = $result["email"];
         set_type_messege('success', " Ппользователь <b>{$result['email']}</b> успешно авторизирован");
         return true;
     }
@@ -69,12 +69,22 @@ function or_an_auth_user()
 //админ ли пользователь
 function user_is_admin(string $email)
 {
-   $result = get_user_on_email($email);
-//    var_dump($result);
-   if ($result['role']==='admin') {
-       return true;
-   }
-   return false;
+    $result = get_user_on_email($email);
+    //    var_dump($result);
+    if ($result['role'] === 'admin') {
+        $_SESSION['admin'] = true;
+        return true;
+    }
+    return false;
+}
+//админ ли пользователь через сесию
+function user_is_admin_in_Sesion()
+{
+    if (isset($_SESSION['admin']) && !empty($_SESSION['admin'])) {
+        return true;
+    } else {
+        return false;
+    }
 }
 //получить всех пользователей
 function get_all_users()
@@ -85,5 +95,48 @@ function get_all_users()
     $statement->execute();
     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
     return $result;
+}
+//функция которая добавляет пользователя () и сразу же возвращает его id
+function add_User_return_id(string $email, string $password)
+{
+    add_user($email, $password);
+    $result = get_user_on_email($email);
+    return $result['id'];
+}
+//добавляем общую информацию 
+function add_general_info($name, $position, $tel, $adres, $id)
+{
+    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
+    $sql = "UPDATE `users` SET `name` = :name, `position` = :position, `tel` = :tel, `adres` = :adres WHERE `users`.`id` = :id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['name' => $name, 'position' => $position, 'tel' => $tel, 'adres' => $adres, 'id' => $id]);
+}
+//Устанавливаем статус
+function set_status($status, $id)
+{
+    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
+    $sql = "UPDATE `users` SET `status` = :status WHERE `users`.`id` = :id;";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['status' => $status, 'id' => $id]);
+}
+//Загружаем аватар
+function upload_avatar($tmp, $name, $id)
+{
+    $typ = pathinfo($name, PATHINFO_EXTENSION);
+    $filName = uniqid();
+    $way = "img/avatar/{$filName}.$typ";
+    move_uploaded_file($tmp, $way);
 
+    $pdo = new PDO("mysql:host=localhost;dbname=rahmur", "root", "");
+    $sql = "UPDATE `users` SET `avatar` = :text WHERE `users`.`id` = :id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['text' => $way, 'id' => $id]);
+}
+//добавляем ссилки на соцсети
+function add_social_links($telegram, $instagram, $vc, $id)
+{
+    $pdo = new PDO("mysql:host=localhost;dbname=rahmur", "root", "");
+    $sql = "INSERT INTO `social_links` (`user_id`, `telegram`, `instagram`, `vc`) VALUES (:id, :telegram, :telegram, :vc)";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['telegram' => $telegram, 'instagram' => $instagram, 'vc' => $vc, 'id' => $id]);
 }

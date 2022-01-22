@@ -1,5 +1,13 @@
+<?php
+session_start();
+require 'functions.php';
+if (!or_an_auth_user() && !user_is_admin_in_Sesion()) {
+    go_to_page('page_login.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
@@ -13,6 +21,7 @@
     <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
     <link rel="stylesheet" media="screen, print" href="css/fa-regular.css">
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-primary-gradient">
         <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/logo.png"> Учебный проект</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
@@ -33,7 +42,12 @@
         </div>
     </nav>
     <main id="js-page-content" role="main" class="page-content mt-3">
+        <?php
+        display_get_messege('danger');
+        display_get_messege('success');
+        ?>
         <div class="subheader">
+
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-plus-circle'></i> Добавить пользователя
             </h1>
@@ -41,7 +55,7 @@
 
 
         </div>
-        <form action="">
+        <form action="add_user.php" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -53,29 +67,29 @@
                                 <!-- username -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <input type="text" id="simpleinput" class="form-control" name="username">
                                 </div>
 
                                 <!-- title -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Место работы</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <input type="text" id="simpleinput" class="form-control" name="position">
                                 </div>
 
                                 <!-- tel -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <input type="text" id="simpleinput" class="form-control" name="tel">
                                 </div>
 
                                 <!-- address -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <input type="text" id="simpleinput" class="form-control" name="adres">
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="col-xl-6">
@@ -88,20 +102,20 @@
                                 <!-- email -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <input type="text" id="simpleinput" class="form-control" name="email">
                                 </div>
 
                                 <!-- password -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <input type="password" id="simpleinput" class="form-control" name="password">
                                 </div>
 
-                                
+
                                 <!-- status -->
                                 <div class="form-group">
                                     <label class="form-label" for="example-select">Выберите статус</label>
-                                    <select class="form-control" id="example-select">
+                                    <select class="form-control" id="example-select" name="status">
                                         <option>Онлайн</option>
                                         <option>Отошел</option>
                                         <option>Не беспокоить</option>
@@ -110,11 +124,11 @@
 
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Загрузить аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file">
+                                    <input type="file" id="example-fileinput" class="form-control-file" name="avatar">
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
 
@@ -137,7 +151,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" name="vk">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -151,7 +165,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" name="telegram">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -165,16 +179,16 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0" name="instagram">
                                         </div>
                                     </div>
                                     <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                        <button class="btn btn-success">Добавить</button>
+                                        <button class="btn btn-success" type="submit" name="add_user">Добавить</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -184,13 +198,11 @@
     <script src="js/vendors.bundle.js"></script>
     <script src="js/app.bundle.js"></script>
     <script>
+        $(document).ready(function() {
 
-        $(document).ready(function()
-        {
 
-          
         });
-
     </script>
 </body>
+
 </html>
