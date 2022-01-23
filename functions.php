@@ -54,6 +54,11 @@ function auth(string $email, string $password)
         return false;
     } else {
         $_SESSION['user'] = $result["email"];
+        if ($result['role'] === 'admin') {
+            $_SESSION['admin'] = true;
+        }else {
+            $_SESSION['admin'] = false;
+        }
         set_type_messege('success', " Ппользователь <b>{$result['email']}</b> успешно авторизирован");
         return true;
     }
@@ -67,16 +72,16 @@ function or_an_auth_user()
     return false;
 }
 //админ ли пользователь
-function user_is_admin(string $email)
-{
-    $result = get_user_on_email($email);
-    //    var_dump($result);
-    if ($result['role'] === 'admin') {
-        $_SESSION['admin'] = true;
-        return true;
-    }
-    return false;
-}
+// function user_is_admin(string $email)
+// {
+//     $result = get_user_on_email($email);
+//     //    var_dump($result);
+//     if ($result['role'] === 'admin') {
+//         $_SESSION['admin'] = true;
+//         return true;
+//     }
+//     return false;
+// }
 //админ ли пользователь через сесию
 function user_is_admin_in_Sesion()
 {
@@ -139,4 +144,14 @@ function add_social_links($telegram, $instagram, $vc, $id)
     $sql = "INSERT INTO `social_links` (`user_id`, `telegram`, `instagram`, `vc`) VALUES (:id, :telegram, :telegram, :vc)";
     $statement = $pdo->prepare($sql);
     $statement->execute(['telegram' => $telegram, 'instagram' => $instagram, 'vc' => $vc, 'id' => $id]);
+}
+//получаем пользователя по id
+function get_user_on_id(string $id = null)
+{
+    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
+    $sql = "SELECT * FROM `users` WHERE `id` = :id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['id' => $id]);
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result;
 }

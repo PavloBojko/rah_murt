@@ -47,6 +47,7 @@ if (!or_an_auth_user()) {
     <main id="js-page-content" role="main" class="page-content mt-3">
         <?php
         display_get_messege('success');
+        display_get_messege('danger');
         ?>
         <!-- <div class="alert alert-success">
                 Профиль успешно обновлен.
@@ -59,7 +60,7 @@ if (!or_an_auth_user()) {
         <div class="row">
             <div class="col-xl-12">
                 <?php
-                if (user_is_admin($_SESSION['user'])) {
+                if (user_is_admin_in_Sesion()) {
                 ?>
                     <a class="btn btn-success" href="create_user.php">Добавить</a>
                 <?php
@@ -98,14 +99,14 @@ if (!or_an_auth_user()) {
                                     <a href="edit.php?id=<?php echo $user['id']; ?>" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                         <?php
                                         echo $user['name'];
-                                        if ($user['email'] == $_SESSION['user'] || isset($_SESSION['admin'])) {
+                                        if ($user['email'] == $_SESSION['user'] || user_is_admin_in_Sesion()) {
                                             echo '<i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>';
                                             echo '<i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>';
                                         }
                                         ?>
                                     </a>
                                     <?php
-                                    if ($user['email'] == $_SESSION['user'] || isset($_SESSION['admin'])) {
+                                    if ($user['email'] == $_SESSION['user'] || user_is_admin_in_Sesion()) {
                                     ?>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="edit.php?id=<?php echo $user['id'] ?>">
