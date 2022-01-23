@@ -1,6 +1,12 @@
 <?php
 session_start();
 require 'functions.php';
+if (!or_an_auth_user()) {
+    go_to_page('page_login.php');
+    exit;
+}
+ 
+
 $id=$_GET['id'];
 $result = get_user_on_id($id);
 
