@@ -1,3 +1,12 @@
+<?php
+session_start();
+require 'functions.php';
+if (!or_an_auth_user()) {
+    go_to_page('page_login.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,11 +47,27 @@
             </h1>
 
         </div>
-        <form action="">
+        <?php
+        $id = $_GET['id'];
+        $result = get_user_on_id($id);
+        ?>
+        <?php
+        if (!user_is_admin_in_Sesion()) {
+            if ($_SESSION['user']!=$result['email']) {
+                set_type_messege('danger','Можно редактировать только свой профиль');
+                go_to_page('users.php');
+                exit;
+            }
+        }
+        ?>
+        <form action="security_us_edit.php" method="POST">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
                         <div class="panel-container">
+                            <?php 
+                            display_get_messege('danger');
+                            ?>
                             <div class="panel-hdr">
                                 <h2>Обновление эл. адреса и пароля</h2>
                             </div>
@@ -50,24 +75,24 @@
                                 <!-- email -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="john@example.com">
+                                    <input type="text" id="simpleinput" class="form-control" value="<?php echo $result['email']?>" name="email">
                                 </div>
 
                                 <!-- password -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <input type="password" id="simpleinput" class="form-control" name="password">
                                 </div>
 
                                 <!-- password confirmation-->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Подтверждение пароля</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <input type="password" id="simpleinput" class="form-control" name="passw_confirm">
                                 </div>
 
-
+                                <input type="hidden" value="<?php echo $id; ?>" name="id">
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Изменить</button>
+                                    <button class="btn btn-warning" type="submit" name="security">Изменить</button>
                                 </div>
                             </div>
                         </div>

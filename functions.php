@@ -56,7 +56,7 @@ function auth(string $email, string $password)
         $_SESSION['user'] = $result["email"];
         if ($result['role'] === 'admin') {
             $_SESSION['admin'] = true;
-        }else {
+        } else {
             $_SESSION['admin'] = false;
         }
         set_type_messege('success', " Ппользователь <b>{$result['email']}</b> успешно авторизирован");
@@ -154,4 +154,13 @@ function get_user_on_id(string $id = null)
     $statement->execute(['id' => $id]);
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result;
+}
+// 
+function edit_credentials($email, $password, $id)
+{
+    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
+    $sql = "UPDATE `users` SET `email` = :email, `password` = :password WHERE `users`.`id` = :id";
+    $statement = $pdo->prepare($sql);
+    
+   $statement->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT), 'id' => $id]);
 }

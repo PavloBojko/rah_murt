@@ -1,8 +1,6 @@
 <?php
 session_start();
 require 'functions.php';
-echo '<pre>';
-var_dump($_POST);
 $name=$_POST['username'];
 $position=$_POST['position'];
 $tel=$_POST['tel'];
