@@ -197,3 +197,22 @@ function has_image(string $id = null)
        return file_exists($result['avatar']);
     }
 }
+// Удаляем пользователя
+function del_user(string $id = null)
+{
+    $user = get_user_on_id($id);
+    unlink($user['avatar']);
+    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
+    $sql="SELECT * FROM `social_links` WHERE `user_id` = :id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['id' => $id]);
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+    $sql = "DELETE FROM `social_links` WHERE `social_links`.`id` = :id_st";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['id_st' => $result['id']]);
+
+    $sql = "DELETE FROM `users` WHERE `users`.`id` = :id_us";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['id_us' => $id]);
+}

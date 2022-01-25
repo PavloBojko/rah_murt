@@ -8,7 +8,6 @@ if (!or_an_auth_user()) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
