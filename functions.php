@@ -161,6 +161,25 @@ function edit_credentials($email, $password, $id)
     $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
     $sql = "UPDATE `users` SET `email` = :email, `password` = :password WHERE `users`.`id` = :id";
     $statement = $pdo->prepare($sql);
-    
-   $statement->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT), 'id' => $id]);
+
+    $statement->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT), 'id' => $id]);
+}
+// получаем статусы из табл. статус если передадим $id то получим только один статус
+function get_status(string $id = null)
+{
+    empty($id) ? $sql = "SELECT * FROM `status`" : $sql = "SELECT * FROM `status` WHERE `id` = :id";
+    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
+    empty($id) ? $sql = "SELECT * FROM `status`" : $sql = "SELECT * FROM `status` WHERE `id` = :id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(empty($id) ? null : ['id' => $id]);
+    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+// обновляем статус пользователя
+function update_status(string $new_status = null, string  $id= null)
+{
+    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
+    $sql= "UPDATE `users` SET `status` = :status WHERE `users`.`id` = :id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['status'=> $new_status,'id' => $id]);
 }
