@@ -54,7 +54,7 @@ if (!or_an_auth_user()) {
         $email = $result['email'];
         $status_user = get_status($result['status']);
         $name_status_user = $status_user[0]['name_status'];
-        $result = get_status();
+        $result_status = get_status();
         ?>
         <?php
         if (!user_is_admin_in_Sesion()) {
@@ -81,7 +81,7 @@ if (!or_an_auth_user()) {
                                             <label class="form-label" for="example-select">Выберите статус</label>
                                             <select class="form-control" id="example-select" name="status">
                                                 <?php
-                                                foreach ($result as $key => $value) {
+                                                foreach ($result_status as $key => $value) {
                                                 ?>
                                                     <option value="<?php echo $value['id'] ?>" <?php echo $value['name_status']==$name_status_user ? 'selected':'' ?> ><?php echo $value['name_status'] ?></option>
                                                 <?php

@@ -176,10 +176,24 @@ function get_status(string $id = null)
     return $result;
 }
 // обновляем статус пользователя
-function update_status(string $new_status = null, string  $id= null)
+function update_status(string $new_status = null, string  $id = null)
 {
     $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
-    $sql= "UPDATE `users` SET `status` = :status WHERE `users`.`id` = :id";
+    $sql = "UPDATE `users` SET `status` = :status WHERE `users`.`id` = :id";
     $statement = $pdo->prepare($sql);
-    $statement->execute(['status'=> $new_status,'id' => $id]);
+    $statement->execute(['status' => $new_status, 'id' => $id]);
+}
+//Функцыя которая проверяет наличие АВАТАРКИ (наличие в базе и физичесски по пупи из базы)
+function has_image(string $id = null)
+{
+    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
+    $sql = "SELECT * FROM `users` WHERE `id` = :id";
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['id' => $id]);
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    if (empty($result['avatar'])) {
+        return false;
+    } else {
+       return file_exists($result['avatar']);
+    }
 }

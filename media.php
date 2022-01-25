@@ -1,5 +1,14 @@
+<?php
+session_start();
+require 'functions.php';
+if (!or_an_auth_user()) {
+    go_to_page('page_login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
@@ -12,6 +21,7 @@
     <link rel="stylesheet" media="screen, print" href="css/fa-solid.css">
     <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-primary-gradient">
         <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/logo.png"> Учебный проект</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
@@ -38,7 +48,20 @@
             </h1>
 
         </div>
-        <form action="">
+        <?php
+        $id = $_GET['id'];
+        $result = get_user_on_id($id);
+        
+        if (!user_is_admin_in_Sesion()) {
+            if ($_SESSION['user'] != $result['email']) {
+                set_type_messege('danger', 'Можно редактировать только свой профиль');
+                go_to_page('users.php');
+                exit;
+            }
+        }
+        ?>
+
+        <form action="edit_media.php" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -48,17 +71,19 @@
                             </div>
                             <div class="panel-content">
                                 <div class="form-group">
-                                    <img src="img/demo/authors/josh.png" alt="" class="img-responsive" width="200">
+                                    <img src=<?php echo has_image($id)?$result['avatar']:"img/demo/authors/josh.png"  ?> alt="" class="img-responsive" width="200">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Выберите аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file">
+                                    <input type="file" id="example-fileinput" class="form-control-file" name="avatar">
                                 </div>
 
+                                <input type="hidden" value=<?php echo $id ?> name="id">
+                                <input type="hidden" value=<?php echo $result['email'] ?> name="email">
 
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Загрузить</button>
+                                    <button type="submit" class="btn btn-warning" name="avat">Загрузить</button>
                                 </div>
                             </div>
                         </div>
@@ -71,34 +96,28 @@
     <script src="js/vendors.bundle.js"></script>
     <script src="js/app.bundle.js"></script>
     <script>
+        $(document).ready(function() {
 
-        $(document).ready(function()
-        {
+            $('input[type=radio][name=contactview]').change(function() {
+                if (this.value == 'grid') {
+                    $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-g');
+                    $('#js-contacts .col-xl-12').removeClassPrefix('col-xl-').addClass('col-xl-4');
+                    $('#js-contacts .js-expand-btn').addClass('d-none');
+                    $('#js-contacts .card-body + .card-body').addClass('show');
 
-            $('input[type=radio][name=contactview]').change(function()
-                {
-                    if (this.value == 'grid')
-                    {
-                        $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-g');
-                        $('#js-contacts .col-xl-12').removeClassPrefix('col-xl-').addClass('col-xl-4');
-                        $('#js-contacts .js-expand-btn').addClass('d-none');
-                        $('#js-contacts .card-body + .card-body').addClass('show');
+                } else if (this.value == 'table') {
+                    $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-1');
+                    $('#js-contacts .col-xl-4').removeClassPrefix('col-xl-').addClass('col-xl-12');
+                    $('#js-contacts .js-expand-btn').removeClass('d-none');
+                    $('#js-contacts .card-body + .card-body').removeClass('show');
+                }
 
-                    }
-                    else if (this.value == 'table')
-                    {
-                        $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-1');
-                        $('#js-contacts .col-xl-4').removeClassPrefix('col-xl-').addClass('col-xl-12');
-                        $('#js-contacts .js-expand-btn').removeClass('d-none');
-                        $('#js-contacts .card-body + .card-body').removeClass('show');
-                    }
+            });
 
-                });
-
-                //initialize filter
-                initApp.listFilter($('#js-contacts'), $('#js-filter-contacts'));
+            //initialize filter
+            initApp.listFilter($('#js-contacts'), $('#js-filter-contacts'));
         });
-
     </script>
 </body>
+
 </html>
