@@ -116,9 +116,18 @@ if (!or_an_auth_user() && !user_is_admin_in_Sesion()) {
                                 <div class="form-group">
                                     <label class="form-label" for="example-select">Выберите статус</label>
                                     <select class="form-control" id="example-select" name="status">
-                                        <option>Онлайн</option>
+                                        <?php
+                                        $result_status = get_status();
+
+                                        foreach ($result_status as $key => $value) {
+                                        ?>
+                                            <option value="<?php echo $value['id'] ?>" <?php echo $value['name_status'] == $name_status_user ? 'selected' : '' ?>><?php echo $value['name_status'] ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                        <!-- <option>Онлайн</option>
                                         <option>Отошел</option>
-                                        <option>Не беспокоить</option>
+                                        <option>Не беспокоить</option> -->
                                     </select>
                                 </div>
 

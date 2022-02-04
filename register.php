@@ -1,13 +1,15 @@
 <?php
 session_start();
 require 'functions.php';
-// var_dump($_POST);
+$db = require 'database/start.php';
 if (isset($_POST['reg'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $data = [
+        'email' => $_POST['email'],
+        'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
+    ];
 
-    $result = get_user_on_email($email);
-
+    $result = $db->get_table_if_no_data('users', ['email' => $_POST['email']]);
+    // var_dump($result);
     if (!empty($result)) {
 
         set_type_messege('danger', 'Этот эл. адрес уже занят другим пользователем.');
@@ -15,7 +17,7 @@ if (isset($_POST['reg'])) {
         go_to_page('page_register.php');
         exit;
     }
-    add_user($email, $password);
+    $db->add_table('users', $data);
 
     set_type_messege('success', 'Регистрация успешна');
 

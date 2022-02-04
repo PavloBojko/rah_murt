@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'functions.php';
+$db = require 'database/start.php';
 if (!or_an_auth_user()) {
     go_to_page('page_login.php');
 }
@@ -84,7 +85,8 @@ if (!or_an_auth_user()) {
         <div class="row" id="js-contacts">
             <?php
 
-            $result = get_all_users();
+            $result = $db->get_table_if_no_data('users');
+
             //вивод пользователей
             foreach ($result as $key => $user) {
             ?>

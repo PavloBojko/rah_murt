@@ -9,14 +9,7 @@ function get_user_on_email(string $email = null)
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result;
 }
-// регестрируем пользователя
-function add_user(string $email, string $password)
-{
-    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
-    $sql = "INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)";
-    $statement = $pdo->prepare($sql);
-    $statement->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
-}
+
 //формируем сообщение
 function set_type_messege(string $type = null, string $messege = null)
 {
@@ -91,23 +84,17 @@ function user_is_admin_in_Sesion()
         return false;
     }
 }
-//получить всех пользователей
-function get_all_users()
-{
-    $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
-    $sql = "SELECT * FROM `users`";
-    $statement = $pdo->prepare($sql);
-    $statement->execute();
-    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-    return $result;
-}
+
+
+
+
 //функция которая добавляет пользователя () и сразу же возвращает его id
-function add_User_return_id(string $email, string $password)
-{
-    add_user($email, $password);
-    $result = get_user_on_email($email);
-    return $result['id'];
-}
+// function add_User_return_id(string $email, string $password)
+// {
+//     add_user($email, $password);
+//     $result = get_user_on_email($email);
+//     return $result['id'];
+// }
 //добавляем общую информацию 
 function add_general_info($name, $position, $tel, $adres, $id)
 {
@@ -120,7 +107,7 @@ function add_general_info($name, $position, $tel, $adres, $id)
 function set_status($status, $id)
 {
     $pdo = new PDO('mysql:hosh=localhost;dbname=rahmur', 'root', '');
-    $sql = "UPDATE `users` SET `status` = :status WHERE `users`.`id` = :id;";
+    $sql = "UPDATE `users` SET `status` = :status WHERE `users`.`id` = :id";
     $statement = $pdo->prepare($sql);
     $statement->execute(['status' => $status, 'id' => $id]);
 }
